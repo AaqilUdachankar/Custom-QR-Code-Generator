@@ -27,22 +27,18 @@ const downloadBtn = document.getElementById("download-btn");
 const qrCanvas = document.getElementById("qr-canvas");
 const ctx = qrCanvas.getContext("2d");
 
-// Initialize nav buttons
 navButtons.forEach(btn => {
   btn.addEventListener("click", (e) => {
     setQRType(e.target.dataset.type, e.target);
   });
 });
 
-// Set initial active button and UI state
 function setQRType(type, clickedButton) {
   qrType = type;
 
-  // Highlight active button
   navButtons.forEach(btn => btn.classList.remove("active"));
   if (clickedButton) clickedButton.classList.add("active");
 
-  // Show/hide inputs
   if (type === "multi") {
     singleInputDiv.classList.add("hidden");
     multiInputDiv.classList.remove("hidden");
@@ -51,12 +47,11 @@ function setQRType(type, clickedButton) {
     multiInputDiv.classList.add("hidden");
   }
 
-  // Change placeholder for single input
   const placeholder = {
     url: "Enter URL...",
     text: "Enter text...",
     phone: "Enter phone number...",
-    email: "Enter email...",
+    email: "Enter email address...",
     sms: "Enter SMS content...",
     multi: ""
   }[type] || "";
@@ -70,11 +65,9 @@ function setQRType(type, clickedButton) {
   lastQRImg = null;
 }
 
-// Load logo templates dynamically (demo logos)
 function loadLogoTemplates(type) {
   logoTemplatesDiv.innerHTML = "";
 
-  // Demo logos (update paths as needed)
   const logos = [
     {name: "Facebook", src: "logos/facebook.png"},
     {name: "Instagram", src: "logos/instagram.png"},
@@ -98,38 +91,32 @@ function loadLogoTemplates(type) {
   });
 }
 
-// Select a logo template
 function selectLogo(src, imgElement) {
   selectedLogoTemplate = src;
   uploadedLogoImage = null;
   logoUploadInput.value = "";
   logoPreviewImg.classList.add("hidden");
 
-  // Highlight selected
   logoTemplatesDiv.querySelectorAll("img").forEach(img => img.classList.remove("active"));
   imgElement.classList.add("active");
 
   updateLogoPreview();
 }
 
-// Clear logo selection
 function clearLogoSelection() {
   selectedLogoTemplate = "";
   logoTemplatesDiv.querySelectorAll("img").forEach(img => img.classList.remove("active"));
 }
 
-// Clear logo preview image
 function clearLogoPreview() {
   logoPreviewImg.src = "";
   logoPreviewImg.classList.add("hidden");
 }
 
-// Clear QR canvas
 function clearQRCode() {
   ctx.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
 }
 
-// Upload logo file handler
 logoUploadInput.addEventListener("change", (e) => {
   const file = e.target.files[0];
   if (!file) return;
@@ -147,14 +134,12 @@ logoUploadInput.addEventListener("change", (e) => {
   reader.readAsDataURL(file);
 });
 
-// Update logo preview size on slider input
 logoSizeInput.addEventListener("input", () => {
   logoSizeLabel.textContent = `${logoSizeInput.value}%`;
   updateLogoPreview();
   drawLogoOnQR();
 });
 
-// Update color value displays
 fgColorInput.addEventListener("input", () => {
   fgColorValue.textContent = fgColorInput.value;
 });
@@ -162,20 +147,18 @@ bgColorInput.addEventListener("input", () => {
   bgColorValue.textContent = bgColorInput.value;
 });
 
-// Update logo preview image size and show it
 function updateLogoPreview() {
+  const sizePercent = logoSizeInput.value;
+  const sizePx = Math.min(100, (256 * sizePercent) / 100);
+
   if (uploadedLogoImage) {
     logoPreviewImg.src = uploadedLogoImage.src;
     logoPreviewImg.classList.remove("hidden");
-    const sizePercent = logoSizeInput.value;
-    const sizePx = Math.min(100, (256 * sizePercent) / 100);
     logoPreviewImg.style.width = sizePx + "px";
     logoPreviewImg.style.height = sizePx + "px";
   } else if (selectedLogoTemplate) {
     logoPreviewImg.src = selectedLogoTemplate;
     logoPreviewImg.classList.remove("hidden");
-    const sizePercent = logoSizeInput.value;
-    const sizePx = Math.min(100, (256 * sizePercent) / 100);
     logoPreviewImg.style.width = sizePx + "px";
     logoPreviewImg.style.height = sizePx + "px";
   } else {
@@ -183,7 +166,6 @@ function updateLogoPreview() {
   }
 }
 
-// Generate QR code and draw logo on canvas
 function generateQR() {
   let content = "";
 
@@ -193,19 +175,37 @@ function generateQR() {
     const emails = multiEmails.value.split(",").map(s => s.trim()).filter(Boolean);
     content = `Links:\n${urls.join("\n")}\nPhones:\n${phones.join("\n")}\nEmails:\n${emails.join("\n")}`;
   } else {
-    content = qrContentInput.value.trim();
-  }
+    const raw = qrContentInput.value.trim();
+    if (!raw) {
+      alert("Please enter content to generate QR code.");
+      return;
+    }
 
-  if (!content) {
-    alert("Please enter content to generate QR code.");
-    return;
+    switch (qrType) {
+      case "url":
+        content = raw;
+        break;
+      case "text":
+        content = raw;
+        break;
+      case "phone":
+        content = `tel:${raw}`;
+        break;
+      case "email":
+        content = `mailto:${raw}`;
+        break;
+      case "sms":
+        content = `sms:${raw}`;
+        break;
+      default:
+        content = raw;
+    }
   }
 
   clearQRCode();
 
-  // Generate QR using qrcode.js
   const tempDiv = document.createElement("div");
-  const qr = new QRCode(tempDiv, {
+  new QRCode(tempDiv, {
     text: content,
     width: 256,
     height: 256,
@@ -228,29 +228,26 @@ function generateQR() {
       };
       lastQRImg.src = qrImg.src;
     };
-
-    qrImg.src = qrImg.src; // trigger onload
+    qrImg.src = qrImg.src;
   }, 100);
 }
 
-// Draw QR code and logo on canvas
 function drawLogoOnQR() {
   ctx.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
   if (lastQRImg) ctx.drawImage(lastQRImg, 0, 0, 256, 256);
 
-  // Draw logo if any
   let logo = null;
   if (uploadedLogoImage) logo = uploadedLogoImage;
   else if (selectedLogoTemplate) {
     logo = new Image();
     logo.src = selectedLogoTemplate;
   }
+
   if (logo) {
     const size = (qrCanvas.width * logoSizeInput.value) / 100;
     const x = (qrCanvas.width - size) / 2;
     const y = (qrCanvas.height - size) / 2;
 
-    // If logo is already loaded, draw immediately, else wait for load
     if (logo.complete) {
       ctx.drawImage(logo, x, y, size, size);
     } else {
@@ -259,7 +256,6 @@ function drawLogoOnQR() {
   }
 }
 
-// Download QR canvas as PNG
 function downloadQR() {
   const link = document.createElement("a");
   link.href = qrCanvas.toDataURL("image/png");
@@ -267,12 +263,10 @@ function downloadQR() {
   link.click();
 }
 
-// Initial setup on DOM ready
 window.addEventListener("DOMContentLoaded", () => {
   setQRType("url", document.querySelector('nav button[data-type="url"]'));
   updateLogoPreview();
 });
 
-// Button event listeners
 generateBtn.addEventListener("click", generateQR);
 downloadBtn.addEventListener("click", downloadQR);

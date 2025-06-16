@@ -12,12 +12,12 @@
   <header>
     <h1>Custom QR Code Generator</h1>
     <nav>
-      <button onclick="setQRType('url')">🔗 URL</button>
-      <button onclick="setQRType('text')">📝 Text</button>
-      <button onclick="setQRType('phone')">📞 Phone</button>
-      <button onclick="setQRType('email')">📧 Email</button>
-      <button onclick="setQRType('sms')">📩 SMS</button>
-      <button onclick="setQRType('multi')">📊 Multi QR</button>
+      <button data-type="url">🔗 URL</button>
+      <button data-type="text">📝 Text</button>
+      <button data-type="phone">📞 Phone</button>
+      <button data-type="email">📧 Email</button>
+      <button data-type="sms">📩 SMS</button>
+      <button data-type="multi">📊 Multi QR</button>
     </nav>
   </header>
 
@@ -33,8 +33,11 @@
         <textarea id="multi-emails" placeholder="Enter multiple emails (comma separated)"></textarea>
       </div>
 
-      <label>Foreground Color: <input type="color" id="foreground-color" value="#ffffff"/></label>
-      <label>Background Color: <input type="color" id="background-color" value="#000000"/></label>
+      <label>Foreground Color: <input type="color" id="foreground-color" value="#000000"/></label>
+      <span id="foreground-color-value">#000000</span>
+
+      <label>Background Color: <input type="color" id="background-color" value="#ffffff"/></label>
+      <span id="background-color-value">#ffffff</span>
 
       <label>Upload Logo: <input type="file" id="logo-upload" accept="image/*"/></label>
       <img id="logo-preview" src="#" alt="Logo Preview" class="hidden"/>
@@ -54,7 +57,7 @@
       <label>Select Logo Template:</label>
       <div id="logo-templates"></div>
 
-      <button onclick="generateQR()">Generate QR Code</button>
+      <button id="generate-btn">Generate QR Code</button>
     </section>
 
     <section>
@@ -62,7 +65,7 @@
       <div id="qr-preview-box">
         <canvas id="qr-canvas" width="256" height="256"></canvas>
       </div>
-      <button onclick="downloadQR()">Download QR</button>
+      <button id="download-btn">Download QR</button>
     </section>
   </main>
 </body>
