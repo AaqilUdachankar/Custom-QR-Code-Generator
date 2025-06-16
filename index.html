@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Custom QR Code Generator</title>
+  <link rel="stylesheet" href="style.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1>Custom QR Code Generator</h1>
+    <nav>
+      <button onclick="setQRType('url')">🔗 URL</button>
+      <button onclick="setQRType('text')">📝 Text</button>
+      <button onclick="setQRType('phone')">📞 Phone</button>
+      <button onclick="setQRType('email')">📧 Email</button>
+      <button onclick="setQRType('sms')">📩 SMS</button>
+      <button onclick="setQRType('multi')">📊 Multi QR</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="input-section">
+      <div id="single-input">
+        <input type="text" id="qr-content" placeholder="Enter content..." />
+      </div>
+
+      <div id="multi-input" class="hidden">
+        <textarea id="multi-urls" placeholder="Enter multiple URLs (comma separated)"></textarea>
+        <textarea id="multi-phones" placeholder="Enter multiple phone numbers (comma separated)"></textarea>
+        <textarea id="multi-emails" placeholder="Enter multiple emails (comma separated)"></textarea>
+      </div>
+
+      <label>Foreground Color: <input type="color" id="foreground-color" value="#ffffff"/></label>
+      <label>Background Color: <input type="color" id="background-color" value="#000000"/></label>
+
+      <label>Upload Logo: <input type="file" id="logo-upload" accept="image/*"/></label>
+      <img id="logo-preview" src="#" alt="Logo Preview" class="hidden"/>
+
+      <label>Logo Size: <span id="logo-size-label">20%</span></label>
+      <input type="range" id="logo-size" min="10" max="50" value="20"/>
+
+      <label>Select QR Appearance Style:</label>
+      <select id="style-template">
+        <option value="default">Default</option>
+        <option value="dots">Dots</option>
+        <option value="round">Round</option>
+        <option value="square">Square</option>
+        <option value="frame">Frame</option>
+      </select>
+
+      <label>Select Logo Template:</label>
+      <div id="logo-templates"></div>
+
+      <button onclick="generateQR()">Generate QR Code</button>
+    </section>
+
+    <section>
+      <h2>QR Code Preview</h2>
+      <div id="qr-preview-box">
+        <canvas id="qr-canvas" width="256" height="256"></canvas>
+      </div>
+      <button onclick="downloadQR()">Download QR</button>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,140 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #111;
+  color: #eee;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  text-align: center;
+  background: #222;
+  padding: 1em 0;
+  box-shadow: 0 2px 5px #000;
+}
+
+h1 {
+  margin: 0;
+  color: #00ffe0;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin-top: 1em;
+}
+
+nav button {
+  background: #333;
+  border: 1px solid #444;
+  color: #eee;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+nav button:hover,
+nav button.active {
+  background: #00ffe0;
+  color: #000;
+  box-shadow: 0 0 10px #00ffe066;
+}
+
+main {
+  max-width: 600px;
+  margin: 2em auto;
+  padding: 2em;
+  background: #1a1a1a;
+  border-radius: 12px;
+  box-shadow: 0 0 10px #000;
+}
+
+input[type="text"],
+textarea,
+input[type="file"],
+select {
+  width: 100%;
+  padding: 10px;
+  margin: 0.5em 0;
+  border-radius: 6px;
+  border: none;
+  background: #333;
+  color: #fff;
+}
+
+input[type="color"] {
+  margin: 0.5em;
+  width: 50px;
+  height: 30px;
+  border: none;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+#qr-preview-box {
+  margin-top: 20px;
+  padding: 1em;
+  background: #fff;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+#logo-preview {
+  margin: 1em 0;
+  max-height: 100px;
+  max-width: 100px;
+  display: block;
+  border-radius: 8px;
+  border: 2px solid #00ffe0;
+  transition: width 0.3s ease, height 0.3s ease;
+  object-fit: contain;
+}
+
+button {
+  margin-top: 1em;
+  padding: 10px 20px;
+  background: #00ffe0;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #00c2a0;
+}
+
+.hidden {
+  display: none;
+}
+
+#logo-templates {
+  margin: 0.5em 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+#logo-templates img {
+  height: 50px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+#logo-templates img:hover {
+  transform: scale(1.1);
+  border-color: #00ffe0;
+}
+
+#logo-templates img.active {
+  border-color: #00ffe0;
+  transform: scale(1.15);
+}
